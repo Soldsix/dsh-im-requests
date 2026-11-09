@@ -1,0 +1,58 @@
+{
+  "name": "dsh-im-requests",
+  "version": "0.1.0",
+  "description": "Live source attribution for authenticated DSH messaging tool calls.",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": false,
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./cordis": {
+      "types": "./dist/cordis.d.ts",
+      "import": "./dist/cordis.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "README.zh.md",
+    "README.i18n.yaml"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.types.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "check": "npm run typecheck && npm test && node scripts/verify-package.mjs",
+    "test:coverage": "npm run build && node --experimental-test-coverage --test --test-coverage-include=\"dist/*.js\" --test-coverage-lines=100 --test-coverage-functions=100 --test-coverage-branches=100 test/requests.test.mjs",
+    "pack:local": "node scripts/pack.mjs"
+  },
+  "dependencies": {
+    "dsh-im-kit": "https://github.com/Soldsix/dsh-im-kit/releases/download/v0.2.1/dsh-im-kit-0.2.1.tgz",
+    "@deepseek-ai/dsh-brand": "0.2.2-rc.1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.1.0"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/node": "24.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Soldsix/dsh-im-requests.git"
+  },
+  "homepage": "https://github.com/Soldsix/dsh-im-requests",
+  "bugs": {
+    "url": "https://github.com/Soldsix/dsh-im-requests/issues"
+  }
+}
