@@ -1,0 +1,46 @@
+{
+  "package": "dsh-im-requests",
+  "version": "0.1.0",
+  "sourceCommit": "065c16cdc02d33c17615194e86e2d52652e219a2",
+  "role": "library",
+  "archive": "dsh-im-requests/artifacts/dsh-im-requests-0.1.0.tgz",
+  "sha256": "b4e3363255fa580b3c5e4dc399333cd1d40245217b0f68a79d49531af656dc87",
+  "unitTestsPerNode": 6,
+  "ciRun": 42615189591,
+  "passedCiJobs": 4,
+  "jobs": [
+    {
+      "name": "verify (windows-latest, 22.19.0)",
+      "conclusion": "success"
+    },
+    {
+      "name": "verify (ubuntu-latest, 22.19.0)",
+      "conclusion": "success"
+    },
+    {
+      "name": "verify (ubuntu-latest, 24.x)",
+      "conclusion": "success"
+    },
+    {
+      "name": "verify (windows-latest, 24.x)",
+      "conclusion": "success"
+    }
+  ],
+  "anonymousDownloadHashVerified": true,
+  "releaseUrl": "https://github.com/Soldsix/dsh-im-requests/releases/tag/v0.1.0",
+  "ciUrl": "https://github.com/Soldsix/dsh-im-requests/actions/runs/42615189591",
+  "host": "DSH 0.2.2-rc.1 / Node >=24.9; Node 22.19 is library compatibility evidence",
+  "realModelApiRequests": 0,
+  "realQqMessagesSent": 0,
+  "productionChanged": false,
+  "personaOrSkillsRead": false,
+  "protectedGroupDataRead": false,
+  "semanticRecallVerified": false,
+  "publicRegistryPublished": false,
+  "evidence": "dsh-im-requests/evidence/20261109/live-source/release.json",
+  "runtimeCoverage": {
+    "lines": 100,
+    "branches": 100,
+    "functions": 100
+  }
+}
