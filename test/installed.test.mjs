@@ -1,9 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {spawn} from 'node:child_process'
-import {mkdtemp,mkdir,writeFile} from 'node:fs/promises'
-import {fileURLToPath} from 'node:url'
-import {join} from 'node:path'
+import {mkdtemp,mkdir,writeFile,realpath} from 'node:fs/promises'
+import {fileURLToPath,pathToFileURL} from 'node:url'
+import {join,relative,isAbsolute} from 'node:path'
 import {verifyFiles} from '../scripts/verify-package.mjs'
 const root=fileURLToPath(new URL('../',import.meta.url))
 test('an independent public consumer executes attribution and compiles complete declarations',{timeout:180000},async t=>{
@@ -38,7 +38,14 @@ if(false){
 }
 console.log('independent-attribution-passed')
 `
- await writeFile(join(area,'consumer.ts'),source);await run([join(area,'node_modules','typescript','bin','tsc'),'--strict','--skipLibCheck','false','--target','ES2023','--module','NodeNext','--moduleResolution','NodeNext','--outDir',join(area,'out'),join(area,'consumer.ts')])
+ await writeFile(join(area,'consumer.ts'),source)
+ const {default:ts}=await import(pathToFileURL(join(area,'node_modules','typescript','lib','typescript.js')).href)
+ const options={strict:true,skipLibCheck:false,target:ts.ScriptTarget.ES2023,module:ts.ModuleKind.NodeNext,moduleResolution:ts.ModuleResolutionKind.NodeNext,outDir:join(area,'out'),types:['node'],typeRoots:[join(area,'node_modules','@types')]}
+ const host=ts.createCompilerHost(options);host.getCurrentDirectory=()=>area
+ const program=ts.createProgram([join(area,'consumer.ts')],options,host)
+ assert.equal(ts.getPreEmitDiagnostics(program).length,0)
+ for(const input of program.getSourceFiles()){const owned=relative(area,await realpath(input.fileName));assert.ok(!owned.startsWith('..')&&!isAbsolute(owned),'Consumer borrowed ancestor declarations')}
+ const emitted=program.emit();assert.equal(emitted.emitSkipped,false);assert.equal(emitted.diagnostics.length,0)
  assert.match(await run([join(area,'out','consumer.js')]),/independent-attribution-passed/)
- await writeFile(join(area,'result.json'),JSON.stringify({passed:true,packedFiles:packed.files.length,ancestorDependenciesBorrowed:false,startedApplications:0,qqMessagesSent:0})+'\n')
+ await writeFile(join(area,'result.json'),JSON.stringify({passed:true,packedFiles:packed.files.length,declarationFiles:program.getSourceFiles().filter(file=>file.isDeclarationFile).length,ancestorDependenciesBorrowed:false,startedApplications:0,qqMessagesSent:0})+'\n')
 })
